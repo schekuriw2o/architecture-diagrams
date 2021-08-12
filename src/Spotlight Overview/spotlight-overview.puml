@@ -1,0 +1,37 @@
+@startuml
+!include https://raw.githubusercontent.com/adrianvlupu/C4-PlantUML/latest/C4_Component.puml
+!include https://raw.githubusercontent.com/adrianvlupu/C4-PlantUML/latest/C4_Deployment.puml
+LAYOUT_WITH_LEGEND()
+
+Container(spa, "Single Page Application", "javascript and react", "")
+
+Container_Boundary(hanako, "HANAKO"){
+    Container(hanakoAPI, "Hanako API", "JAVA8", "")
+    ContainerDb(hanakoDB, "Hanako", "Postgres Database", "")
+
+
+    Rel(hanakoAPI, hanakoDB, "Uses", "JSON/HTTPS")
+}
+
+Container_Boundary(gnosis, "GNOSIS"){
+     Container(gnosisAPI, "Gnosis API", "JAVA8", "Description")
+     ContainerDb(gnosisDB, "Gnosis", "Postgres Database", "")
+
+     Rel(gnosisAPI, gnosisDB, "For", "JSON/HTTPS")
+}
+
+ ContainerDb(bg, "BigQuery", "Big Query", "")
+
+
+Rel(spa, hanakoAPI, "Uses", "JSON/HTTPS")
+Rel(spa, gnosisAPI, "Uses", "JSON/HTTPS")
+
+Rel(hanakoAPI, hanakoDB, "Uses", "JSON/HTTPS")
+
+Rel( hanakoAPI,bg, "Uses", "JSON/HTTPS")
+Rel( gnosisAPI, bg, "Uses", "JSON/HTTPS")
+
+Rel(gnosisAPI, gnosisDB, "Uses", "JSON/HTTPS")
+
+
+@enduml
